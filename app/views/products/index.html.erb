@@ -1,0 +1,22 @@
+<h3 style="text-align: center;">All Products</h3>
+<%= link_to 'New Product', new_product_path, class: "float-right mr-3" %>
+
+<div style="display: flex; mt-5">
+  <% @products.each do |product| %>
+    <div class="card product-card" style="border-radius: 20px">
+      <%= image_tag product.images.first, style:"height: 15rem; border-radius: 20px;" if product.images.attached? %>
+      <div class="card-body text-center pb-0">
+        <h4><%= product.title %></h4>
+        <p><%= product.description %></p>
+        <p>$<%= product.price %></p>
+      </div>
+
+      <div class="card_links">
+        <%= link_to 'Show', product, id: "link", class: "btn btn-success" %>
+        <%= link_to 'Edit', edit_product_path(product), id: "link", class: "btn btn-primary"%>
+        <%= link_to 'Destroy', product, id: "link", class: "btn btn-danger", method: :delete, data: { confirm: 'Are you sure?' } %>
+      </div>
+    </div>
+  <% end %>
+</div>
+

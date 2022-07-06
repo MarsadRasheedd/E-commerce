@@ -1,0 +1,23 @@
+// Place all the styles related to the pages controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#view_product{
+  visibility: hidden;
+}
+
+#view_product :hover{
+  color: #8F479A;
+  text-decoration: none;
+}
+
+.product-card:hover {
+  background-color: #f2f8f9;
+  color: #00838d;
+  border: 1px solid #00838d;
+  transition: 0.4s;
+
+  #view_product{
+    visibility:visible;
+  }
+}

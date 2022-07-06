@@ -1,0 +1,21 @@
+// Place all the styles related to the products controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.card_links{
+  display: flex;
+  justify-content:center;
+  margin-bottom: 7px;
+}
+
+#link{
+  margin-top: 4px;
+  margin-left: 4px;
+  margin-right: 4px;
+  color: white;
+}
+
+.product-card{
+  width: 21rem;
+  margin: 9px
+}

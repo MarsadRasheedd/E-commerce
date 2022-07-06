@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  totalPrice: 1.5
+  user: one
+
+two:
+  totalPrice: 1.5
+  user: two
