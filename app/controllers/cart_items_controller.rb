@@ -5,8 +5,14 @@ class CartItemsController < ApplicationController
     @cart_items = CartItem.select("*").where(cartt_id: @cartt.id)
   end
 
-
   def create
+    if current_user
+      if current_user.products.exists?(params[:cart_item][:product_id])
+        flash[:alert] = "You cannot add to cart your product"
+        return
+      end
+    end
+
     @cartItem = CartItem.new(cart_item_params)
     if @cartItem.save
       flash[:notice] = "Product added to cart successfully.."
