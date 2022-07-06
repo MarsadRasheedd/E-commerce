@@ -1,0 +1,9 @@
+I"Œ(function() {
+  window.myFunction((function(_this) {
+    return function() {
+      return quantity + 1;
+    };
+  })(this));
+
+}).call(this);
+:ET

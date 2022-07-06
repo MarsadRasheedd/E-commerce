@@ -1,0 +1,19 @@
+<% if product.respond_to?(:pg_search_highlight) %>
+    <%= product.pg_search_highlight.html_safe %>
+<% else %>
+<tr>
+  <td><%= product.title %></td>
+  <td><%= product.description %></td>
+  <td><%= product.price %></td>
+  <td><%= product.serial_no %></td>
+  <td>
+    <div>
+      <% (0...product.images.count).each do |image| %>
+      <td>
+        <%= image_tag(product.images[image], style: "height: 100px; width: auto" ) %>
+      </td>
+      <% end %>
+    </div>
+  </td>
+</tr>
+<% end %>

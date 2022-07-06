@@ -1,0 +1,18 @@
+<h3 style="text-align: center; margin-top: 5px;">Edit Product</h3>
+
+<%= render 'form', product: @product %>
+
+<div class="d-flex justify-content-center mt-3">
+  <% (0...@product.images.count).each do |image| %>
+    <div style="height=200px; width=200px; margin: 10px;">
+        <%= image_tag(@product.images[image], style: 'width:500px; height: auto')  %>
+    </div>
+  <% end %>
+
+</div>
+
+
+<div class="d-flex justify-content-center mt-3">
+  <%= link_to 'Show', @product, class: "btn btn-primary" %>
+  <%= link_to 'Back', products_path, class: "btn btn-primary ml-2" %>
+</div>

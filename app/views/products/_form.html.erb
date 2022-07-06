@@ -1,0 +1,45 @@
+<div class="continer">
+  <div class="row">
+    <div class="col-12 d-flex justify-content-center">
+
+      <%= form_with(model: product, remote: true) do |form| %>
+        <% if product.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= pluralize(product.errors.count, "error") %> prohibited this product from being saved:</h2>
+
+            <ul>
+            <% product.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="field form-group">
+          <%= form.label :title %>
+          <%= form.text_field :title, class: "form-control" %>
+        </div>
+
+        <div class="field form-group">
+          <%= form.label :description %>
+          <%= form.text_area :description, class: "form-control" %>
+        </div>
+
+        <div class="field form-group">
+          <%= form.label :price %>
+          <%= form.text_field :price, class: "form-control" %>
+        </div>
+
+        <div class="field form-group">
+          <%= form.label :Select_Product_Image %>
+          <%= form.file_field :images, multiple: true %>
+        </div>
+
+        <div class="actions">
+          <%= form.submit class: "btn btn-primary"%>
+        </div>
+      <% end %>
+
+    </div>
+  </div>
+</div>
