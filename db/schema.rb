@@ -46,31 +46,6 @@ ActiveRecord::Schema.define(version: 2022_07_05_142857) do
     t.index ["product_id"], name: "index_cart_items_on_product_id"
   end
 
-  create_table "cart_lists", force: :cascade do |t|
-    t.integer "quantity"
-    t.bigint "user_id"
-    t.bigint "product_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["product_id"], name: "index_cart_lists_on_product_id"
-    t.index ["user_id"], name: "index_cart_lists_on_user_id"
-  end
-
-  create_table "carts", force: :cascade do |t|
-    t.integer "quantity"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "user_id"
-    t.index ["user_id"], name: "index_carts_on_user_id"
-  end
-
-  create_table "carts_products", id: false, force: :cascade do |t|
-    t.bigint "cart_id", null: false
-    t.bigint "product_id", null: false
-    t.index ["cart_id", "product_id"], name: "index_carts_products_on_cart_id_and_product_id"
-    t.index ["product_id", "cart_id"], name: "index_carts_products_on_product_id_and_cart_id"
-  end
-
   create_table "cartts", force: :cascade do |t|
     t.float "totalPrice"
     t.bigint "user_id"
@@ -103,32 +78,11 @@ ActiveRecord::Schema.define(version: 2022_07_05_142857) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "products_shopping_carts", force: :cascade do |t|
-    t.bigint "products_id"
-    t.bigint "shopping_carts_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["products_id"], name: "index_products_shopping_carts_on_products_id"
-    t.index ["shopping_carts_id"], name: "index_products_shopping_carts_on_shopping_carts_id"
-  end
-
-  create_table "shopping_cart_lists", force: :cascade do |t|
-    t.integer "quantity"
-    t.float "price"
-    t.bigint "user_id"
-    t.bigint "product_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["product_id"], name: "index_shopping_cart_lists_on_product_id"
-    t.index ["user_id"], name: "index_shopping_cart_lists_on_user_id"
-  end
-
-  create_table "shopping_carts", force: :cascade do |t|
-    t.integer "quantity"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "user_id"
-    t.index ["user_id"], name: "index_shopping_carts_on_user_id"
+  create_table "products_users", id: false, force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "product_id", null: false
+    t.index ["product_id", "user_id"], name: "index_products_users_on_product_id_and_user_id"
+    t.index ["user_id", "product_id"], name: "index_products_users_on_user_id_and_product_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -151,14 +105,6 @@ ActiveRecord::Schema.define(version: 2022_07_05_142857) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "cart_items", "cartts"
   add_foreign_key "cart_items", "products"
-  add_foreign_key "cart_lists", "products"
-  add_foreign_key "cart_lists", "users"
-  add_foreign_key "carts", "users"
   add_foreign_key "cartts", "users"
   add_foreign_key "comments", "products"
-  add_foreign_key "products_shopping_carts", "products", column: "products_id"
-  add_foreign_key "products_shopping_carts", "shopping_carts", column: "shopping_carts_id"
-  add_foreign_key "shopping_cart_lists", "products"
-  add_foreign_key "shopping_cart_lists", "users"
-  add_foreign_key "shopping_carts", "users"
 end
