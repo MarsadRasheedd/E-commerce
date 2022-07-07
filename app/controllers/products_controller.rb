@@ -39,6 +39,7 @@ class ProductsController < ApplicationController
   def create
     @product = Product.new(product_params)
     @product.serial_no = Product.generate_serial_number
+    current_user.products << @product
 
     respond_to do |format|
       if @product.save
