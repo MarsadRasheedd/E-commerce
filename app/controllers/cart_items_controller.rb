@@ -1,92 +1,72 @@
-class CartItemsController < ApplicationController
+# frozen_string_literal: true
 
+# this controller handles cart items methods.
+class CartItemsController < ApplicationController
   def index
-    @cartt = Cartt.find_by(user_id: current_user.id)
-    @cart_items = CartItem.select("*").where(cartt_id: @cartt.id)
+    if current_user
+      config_buyer if current_user&.seller? || current_user&.visitor?
+      @cart_items = CartItem.select('*').where(cartt_id: current_user.cartt_id)
+    else
+      cart_id = session['cart_id']
+      @cart_items = CartItem.select('*').where(cartt_id: cart_id)
+    end
   end
 
   def create
-    if current_user
-      if current_user.products.exists?(params[:cart_item][:product_id])
-        flash[:alert] = "You cannot add to cart your product"
-        return
-      end
+    @cart_item = CartItem.new(cart_item_params)
+
+    if current_user&.seller?
+      flash[:notice] = "Currently, you're in seller mode. Change to buyer to buy products."
+    elsif @cart_item.save
+      flash[:notice] = 'Product added to cart successfully..'
+    else
+      flash[:alert] = 'Something went wrong while saving.'
     end
 
-    @cartItem = CartItem.new(cart_item_params)
-    if @cartItem.save
-      flash[:notice] = "Product added to cart successfully.."
-    else
-      flash[:alert] = "Something went wrong while saving."
-    end
     redirect_to :root
   end
 
-  def increment_quantity_item
-    @cartItem = CartItem.find(params[:id])
-    if @cartItem.update(quantity: (@cartItem.quantity + 1))
-      flash[:notice] = "Product Updated Successfully."
+  def increment_quantity
+    @cart_item = CartItem.find(params[:id])
+    if @cart_item.update(quantity: (@cart_item.quantity + 1))
+      flash[:notice] = 'Product Updated Successfully.'
     else
-      flash[:alert] = "Something went wrong while updating."
+      flash[:alert] = 'Something went wrong while updating.'
     end
     redirect_to :cart_items
   end
 
-  def decrement_quantity_item
-    @cartItem = CartItem.find(params[:id])
-    if @cartItem.quantity != 1
-      if @cartItem.update(quantity: (@cartItem.quantity - 1))
-        flash[:notice] = "Product Updated Successfully."
-      else
-        flash[:alert] = "Something went wrong while updating."
-      end
-      redirect_to :cart_items
-    else
-      flash[:notice] = "Product quanity cannot be less than 1."
-    end
-  end
+  def decrement_quantity
+    @cart_item = CartItem.find(params[:id])
+    return unless @cart_item.quantity != 1
 
-  def update_item
-    @cartItem = CartItem.find(params[:id])
-    @cartItem.update(cart_item_params)
+    if @cart_item.update(quantity: (@cart_item.quantity - 1))
+      flash[:notice] = 'Product Updated Successfully.'
+    else
+      flash[:alert] = 'Something went wrong while updating.'
+    end
+    redirect_to :cart_items
   end
 
   def delete_item
-    @cartItem = CartItem.find(params[:id])
-    if @cartItem.destroy
-      flash[:notice] = "Product removed from cart successfully"
+    @cart_item = CartItem.find(params[:id])
+    if @cart_item.destroy
+      flash[:notice] = 'Product removed from cart successfully'
     else
-      flash[:alert] = "Something went wrong while deleting."
+      flash[:alert] = 'Something went wrong while deleting.'
     end
     redirect_to :cart_items
   end
 
-
-  def update
-    @cartItem = CartItem.find(params[:id])
-    @cartItem.update_attributes(cart_params)
-  end
-
-  def destroy
-    # @cart_item = CartItem.find(params[:id])
-    # @cart_item.destroy
-    # respond_to do |format|
-    #     format.html { redirect_to :root notice: 'Article was successfully deleted.' }
-    #     format.json { head :no_content }
-    # end
-
-    # @cart_item = CartItem.find_by(cart_item_params)
-    # if @cartItem.destroy
-    #   flash[:notice] = "Product removed from cart successfully.."
-    # else
-    #   flash[:alert] = "Something went wrong!"
-    # end
-    # redirect_to :root
-  end
-
   private
+
   def cart_item_params
     params.require(:cart_item).permit(:quantity, :product_id, :cartt_id)
   end
 
+  def config_buyer
+    current_user.update(role: :buyer)
+    flash[:notice] = "Congratulations. You're now buyer. You can buy products."
+    redirect_to :root
+  end
 end

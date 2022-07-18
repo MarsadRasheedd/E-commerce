@@ -1,6 +1,3 @@
-<% if product.respond_to?(:pg_search_highlight) %>
-    <%= product.pg_search_highlight.html_safe %>
-<% else %>
 <tr>
   <td><%= product.title %></td>
   <td><%= product.description %></td>

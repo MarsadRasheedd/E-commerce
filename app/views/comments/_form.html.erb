@@ -1,7 +1,18 @@
-<%= form_with(model: [ @product, @product.comments.build ], remote: true) do |form| %>
+<%= form_with(model: @comment, url: [@product, @comment], remote: true) do |form| %>
+  <% if @comment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@comment.errors.count, "error") %> prohibited this comment from being saved:</h2>
+        <ul>
+          <% @comment.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
   <p>
     <%= form.label :comment %><br>
     <%= form.text_area :comment %>
+    <%= form.hidden_field :user_id, style:"width: 0px;",  value: current_user.id %>
   </p>
   <p>
     <%= form.submit %>
