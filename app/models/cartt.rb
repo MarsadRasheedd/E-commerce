@@ -1,4 +1,6 @@
+# frozen_string_literal: true
+
 class Cartt < ApplicationRecord
-  belongs_to :user
+  has_one :user
   has_many :cart_items
 end

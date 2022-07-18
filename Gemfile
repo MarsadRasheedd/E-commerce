@@ -65,3 +65,5 @@ gem 'devise'
 gem 'stripe'
 gem 'pg_search'
 gem 'bootstrap', '~> 4.0.0'
+
+gem "pundit", "~> 2.2"

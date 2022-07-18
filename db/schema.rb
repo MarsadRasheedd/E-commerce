@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_05_142857) do
+ActiveRecord::Schema.define(version: 2022_07_14_155951) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,12 +46,17 @@ ActiveRecord::Schema.define(version: 2022_07_05_142857) do
     t.index ["product_id"], name: "index_cart_items_on_product_id"
   end
 
+  create_table "carts_products", id: false, force: :cascade do |t|
+    t.bigint "cart_id", null: false
+    t.bigint "product_id", null: false
+    t.index ["cart_id", "product_id"], name: "index_carts_products_on_cart_id_and_product_id"
+    t.index ["product_id", "cart_id"], name: "index_carts_products_on_product_id_and_cart_id"
+  end
+
   create_table "cartts", force: :cascade do |t|
     t.float "totalPrice"
-    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_cartts_on_user_id"
   end
 
   create_table "comments", force: :cascade do |t|
@@ -59,7 +64,9 @@ ActiveRecord::Schema.define(version: 2022_07_05_142857) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "product_id"
+    t.bigint "user_id"
     t.index ["product_id"], name: "index_comments_on_product_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
   create_table "coupons", force: :cascade do |t|
@@ -67,6 +74,25 @@ ActiveRecord::Schema.define(version: 2022_07_05_142857) do
     t.date "valid_till"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.date "order_date"
+    t.float "amount"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
+  create_table "orders_lists", force: :cascade do |t|
+    t.bigint "product_id"
+    t.bigint "user_id"
+    t.float "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_orders_lists_on_product_id"
+    t.index ["user_id"], name: "index_orders_lists_on_user_id"
   end
 
   create_table "products", force: :cascade do |t|
@@ -98,6 +124,8 @@ ActiveRecord::Schema.define(version: 2022_07_05_142857) do
     t.integer "phone"
     t.string "address"
     t.integer "role", default: 0
+    t.bigint "cartt_id"
+    t.index ["cartt_id"], name: "index_users_on_cartt_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -105,6 +133,10 @@ ActiveRecord::Schema.define(version: 2022_07_05_142857) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "cart_items", "cartts"
   add_foreign_key "cart_items", "products"
-  add_foreign_key "cartts", "users"
   add_foreign_key "comments", "products"
+  add_foreign_key "comments", "users"
+  add_foreign_key "orders", "users"
+  add_foreign_key "orders_lists", "products"
+  add_foreign_key "orders_lists", "users"
+  add_foreign_key "users", "cartts"
 end

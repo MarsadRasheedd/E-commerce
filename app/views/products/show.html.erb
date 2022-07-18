@@ -30,30 +30,41 @@
       <% end %>
 
       <div class="d-flex  mt-3">
-          <%= link_to 'Edit', edit_product_path(@product), class: "btn btn-primary" %>
-          <%= link_to 'Back', products_path, class: "ml-2 btn btn-primary" %>
+          <%= link_to 'Back', root_path, class: "ml-2 btn btn-primary" %>
       </div>
 
     </div>
 
     <div class="col-4">
-      <div>
-        <h2>Add Comment</h2>
-        <%= render 'comments/form' %>
-      </div>
+      <% if current_user %>
+        <% if !current_user.products.exists?(@product.id) %>
+          <div>
+            <h2>Add Comment</h2>
 
+            <%= render 'comments/new_form' %>
+
+          </div>
+        <% end %>
+      <% end %>
       <h3>Comments by users</h3>
 
       <div id="products-comments-con">
         <% @product.comments.each do |comment| %>
           <div class="card text-center m-2">
-              <h5>
+            <h5>
+              <% if current_user %>
+                <% if current_user.comments.exists? (comment.id) %>
+                  <%= link_to comment.comment,  [@product, comment] %>
+                <% else %>
+                  <%= comment.comment %>
+                <% end %>
+              <% else %>
                 <%= comment.comment %>
-              </h5>
+              <% end %>
+            </h5>
           </div>
         <% end %>
       </div>
-      <br>
     </div>
   </div>
 </div>

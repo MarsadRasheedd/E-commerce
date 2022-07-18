@@ -27,9 +27,9 @@
             <td><%= product.price %></td>
             <td><%= product.serial_no %></td>
 
-            <td><%= button_to "-", {controller: :cart_items, action: 'decrement_quantity_item', id: item.id }, style: "width: 50px", class: "btn btn-primary", method: :patch %></td>
+            <td><%= button_to "-", {controller: :cart_items, action: 'decrement_quantity', id: item.id }, style: "width: 50px", class: "btn btn-primary", method: :patch %></td>
             <td><strong><%= quantity %></strong></td>
-            <td><%= button_to "+", {controller: :cart_items, action: 'increment_quantity_item', id: item.id }, style: "width: 50px", class: "btn btn-primary", method: :patch %></td>
+            <td><%= button_to "+", {controller: :cart_items, action: 'increment_quantity', id: item.id }, style: "width: 50px", class: "btn btn-primary", method: :patch %></td>
 
             <% total = product.price * item.quantity %>
             <% sub_total = sub_total + total %>
