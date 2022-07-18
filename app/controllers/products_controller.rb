@@ -1,49 +1,35 @@
+# frozen_string_literal: true
+
+# this controller handles products methods.
 class ProductsController < ApplicationController
-  before_action :set_product, only: %i[ show edit update destroy ]
+  before_action :set_product, only: %i[show edit update destroy]
+  before_action :authorize_product, only: %i[create]
 
   def index
-    if params[:search]
-      @products = Product.search(params[:search]).with_pg_search_highlight
-    else
-      @products = Product.all
+    if current_user&.visitor? || current_user&.buyer?
+      current_user.update(role: :seller)
+      flash[:notice] = "Congratulations. You're now seller. You can sell your products."
+      redirect_to :root
     end
+    @products = current_user.products
+    authorize @products
   end
 
-  def show
-  end
+  def show; end
 
   def new
     @product = Product.new
+    authorize @product
   end
 
   def edit
-  end
-
-  def search
-    if params[:title_search].present?
-      @products = Product.search(params[:search])
-    end
-    respond_to do |format|
-      format.js
-    end
-    # respond_to do |format|
-    #   format.turbo_stream do
-    #     # render turbo_stream: turbo_stream.update("search_results", Time.zone.now)
-    #     # render turbo_stream: turbo_stream.update("search_results", @movies.count)
-    #     render turbo_stream: turbo_stream.update("search_results",
-    #                             partial: "search_results", locals: { products: @products })
-    #   end
-    # end
+    authorize @product
   end
 
   def create
-    @product = Product.new(product_params)
-    @product.serial_no = Product.generate_serial_number
-    current_user.products << @product
-
     respond_to do |format|
       if @product.save
-        format.html { redirect_to product_url(@product), notice: "Product was successfully created." }
+        format.html { redirect_to product_url(@product), notice: 'Product was successfully created.' }
         format.json { render :show, status: :created, location: @product }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -53,9 +39,10 @@ class ProductsController < ApplicationController
   end
 
   def update
+    authorize @product
     respond_to do |format|
       if @product.update(product_params)
-        format.html { redirect_to product_url(@product), notice: "Product was successfully updated." }
+        format.html { redirect_to product_url(@product), notice: 'Product was successfully updated.' }
         format.json { render :show, status: :ok, location: @product }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -65,20 +52,29 @@ class ProductsController < ApplicationController
   end
 
   def destroy
+    authorize @product
     @product.destroy
 
     respond_to do |format|
-      format.html { redirect_to products_url, notice: "Product was successfully destroyed." }
+      format.html { redirect_to products_url, notice: 'Product was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
-    def set_product
-      @product = Product.find(params[:id])
-    end
 
-    def product_params
-      params.require(:product).permit(:title, :description, :price, :serial_no, images: [])
-    end
+  def set_product
+    @product = Product.find(params[:id])
+  end
+
+  def authorize_product
+    @product = Product.new(product_params)
+    @product.serial_no = Product.generate_serial_number
+    authorize @product
+    current_user.products << @product if @product.present?
+  end
+
+  def product_params
+    params.require(:product).permit(:title, :description, :price, :serial_no, images: [])
+  end
 end

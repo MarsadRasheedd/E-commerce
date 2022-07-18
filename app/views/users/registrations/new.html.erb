@@ -45,6 +45,13 @@
             <%= f.password_field :password_confirmation, autocomplete: "new-password" , class:"form-control" %>
           </div>
 
+          <% if session["cart_id"] %>
+            <%= f.hidden_field :cartt_id, style:"width: 0px;",  value: session["cart_id"] %>
+          <% else %>
+            <% cart = Cartt.create(totalPrice: 0)  %>
+            <%= f.hidden_field :cartt_id, style:"width: 0px;",  value: cart.id %>
+          <% end %>
+
           <div class="actions d-flex justify-content-center mb-3">
             <%= f.submit "Sign up", class: "btn btn-primary" %>
           </div>

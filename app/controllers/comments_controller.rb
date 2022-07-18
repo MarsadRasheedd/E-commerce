@@ -1,18 +1,24 @@
+# frozen_string_literal: true
+
+# this controller handles comments methods.
 class CommentsController < ApplicationController
-  before_action :set_comment, only: %i[ show edit update destroy ]
+  before_action :set_comment, only: %i[show edit update destroy]
 
   def index
     @comments = Comment.all
   end
 
   def show
+    authorize @comment
   end
 
   def new
     @comment = Comment.new
+    authorize @comment
   end
 
   def edit
+    authorize @comment
   end
 
   def create
@@ -21,42 +27,42 @@ class CommentsController < ApplicationController
 
     respond_to do |format|
       if @comment.save
-        format.html { redirect_to products_path(@product), notice: "Comment was successfully created." }
-        format.js { render :nothing => true }
+        format.js { render nothing: true }
       else
+        flash[:notice] = 'Something went wrong.'
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
       end
     end
   end
 
   def update
-    respond_to do |format|
-      if @comment.update(comment_params)
-        format.html { redirect_to comment_url(@comment), notice: "Comment was successfully updated." }
-        format.json { render :show, status: :ok, location: @comment }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
-      end
+    authorize @comment
+    if @comment.update(comment_params)
+      flash[:notice] = 'Comment was updated sucessfully..'
+    else
+      flash[:alert] = 'Something went wrong.'
     end
+    redirect_to product_path(@product)
   end
 
   def destroy
-    @comment.destroy
-
-    respond_to do |format|
-      format.html { redirect_to comments_url, notice: "Comment was successfully destroyed." }
-      format.json { head :no_content }
+    authorize @comment
+    if @comment.destroy
+      flash[:notice] = 'Comment was successfully destroyed.'
+    else
+      flash[:alert] = 'Something went wrong!!'
     end
+    redirect_to product_path(@product)
   end
 
   private
-    def set_comment
-      @comment = Comment.find(params[:id])
-    end
 
-    def comment_params
-      params.require(:comment).permit(:comment)
-    end
+  def set_comment
+    @product = Product.find(params[:product_id])
+    @comment = Comment.find(params[:id])
+  end
+
+  def comment_params
+    params.require(:comment).permit(:comment, :user_id)
+  end
 end
