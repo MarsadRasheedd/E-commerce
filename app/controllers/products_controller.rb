@@ -29,6 +29,7 @@ class ProductsController < ApplicationController
   def create
     respond_to do |format|
       if @product.save
+        current_user.products << @product 
         format.html { redirect_to product_url(@product), notice: 'Product was successfully created.' }
         format.json { render :show, status: :created, location: @product }
       else
@@ -71,7 +72,6 @@ class ProductsController < ApplicationController
     @product = Product.new(product_params)
     @product.serial_no = Product.generate_serial_number
     authorize @product
-    current_user.products << @product if @product.present?
   end
 
   def product_params
