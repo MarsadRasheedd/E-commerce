@@ -12,7 +12,7 @@ module ChargesHelper
 
   def set_up_order_list
     user_cart = Cartt.find(current_user.cartt_id)
-    cart_items = CartItem.select('*').where('cartt_id = ?', user_cart.id)
+    cart_items = CartItem.select('*').where(cartt_id: user_cart.id)
 
     cart_items.each do |item|
       OrdersList.create(product_id: item.product_id, user_id: current_user.id, quantity: item.quantity)

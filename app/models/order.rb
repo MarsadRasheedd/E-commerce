@@ -2,7 +2,7 @@
 
 class Order < ApplicationRecord
   validates :order_date, presence: true, format: { with: /\d{4}-\d{2}-\d{2}/, message: 'format not correct.' }
-  validates_numericality_of :amount
+  validates :amount, numericality: true
 
   belongs_to :user
 end

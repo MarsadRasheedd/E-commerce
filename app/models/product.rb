@@ -6,13 +6,13 @@ class Product < ApplicationRecord
 
   validates :title, :description, presence: { message: 'Cannot be blank.' },
                                   length: { minimum: 5, message: 'is too short.' }
-  validates_numericality_of :price, greater_than: 10
+  validates :price, numericality: { greater_than: 10 }
   validates :images, presence: { message: '(atleast one) must be provided.' }
 
   has_many_attached :images, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :cart_items, dependent: :destroy
-  has_and_belongs_to_many :users
+  has_and_belongs_to_many :users, dependent: :destroy
   accepts_nested_attributes_for :comments
 
   pg_search_scope :search, against: [:title],

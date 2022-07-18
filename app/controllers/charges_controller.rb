@@ -6,7 +6,7 @@ class ChargesController < ApplicationController
 
   def new
     if user_signed_in?
-      @@amount = params[:amount].to_i
+      Cartt.find(current_user.cartt_id).update(totalPrice: params[:amount])
     else
       flash[:alert] = 'You need to sign-up or sign-in'
       redirect_to new_user_registration_path
@@ -16,7 +16,7 @@ class ChargesController < ApplicationController
   def create
     customer = Stripe::Customer.create({ email: params[:stripeEmail], source: params[:stripeToken] })
 
-    Stripe::PaymentIntent.create(customer: customer.id, amount: @@amount,
+    Stripe::PaymentIntent.create(customer: customer.id, amount: amount,
                                  description: 'Rails Stripe transaction', currency: 'INR')
   rescue Stripe::CardError => e
     flash[:error] = e.message
@@ -24,6 +24,6 @@ class ChargesController < ApplicationController
   end
 
   def amount
-    @@amount
+    Cartt.find(current_user.cartt_id).totalPrice.to_i
   end
 end
