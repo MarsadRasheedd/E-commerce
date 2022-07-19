@@ -9,7 +9,7 @@
 <% end %>
 
 <% if @products.count >= 1 %>
-  <div style="display: flex; mt-5">
+  <div style="display: flex; flex-wrap:wrap;">
     <% @products.each do |product| %>
     <% if !user_signed_in? || !current_user.products.exists?(product.id) %>
       <div class="card product-card" style="border-radius: 20px">

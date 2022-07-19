@@ -4,11 +4,7 @@
 class PagesController < ApplicationController
   def show
     @cart_item = CartItem.new
-    @products = if params[:search]
-                  Product.search(params[:search])
-                else
-                  Product.all
-                end
+    @products = params[:search] ? Product.search(params[:search]) : Product.all
   end
 
   def error_page

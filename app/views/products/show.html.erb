@@ -1,48 +1,20 @@
 <div class="container">
   <div class="row">
     <div class="col-8">
-      <p>
-        <strong>Title:</strong>
-        <%= @product.title %>
-      </p>
 
-      <p>
-        <strong>Description:</strong>
-        <%= @product.description %>
-      </p>
-
-      <p>
-        <strong>Price:</strong>
-        <%= @product.price %>
-      </p>
-
-      <p>
-        <strong>Serial no:</strong>
-        <%= @product.serial_no %>
-      </p>
-
-      <br>
-
-      <% (0...@product.images.count).each do |image| %>
-        <div style="height=200px; width=auto">
-            <%= image_tag(@product.images[image], style: 'width:500px; height: auto')  %>
-        </div>
-      <% end %>
+      <%= render 'product', locals: {product: @product} %>
 
       <div class="d-flex  mt-3">
           <%= link_to 'Back', root_path, class: "ml-2 btn btn-primary" %>
       </div>
-
     </div>
 
     <div class="col-4">
       <% if current_user %>
-        <% if !current_user.products.exists?(@product.id) %>
+        <% if owns_product(@product.id) %>
           <div>
             <h2>Add Comment</h2>
-
             <%= render 'comments/new_form' %>
-
           </div>
         <% end %>
       <% end %>
@@ -53,7 +25,7 @@
           <div class="card text-center m-2">
             <h5>
               <% if current_user %>
-                <% if current_user.comments.exists? (comment.id) %>
+                <% if owns_comment(comment.id) %>
                   <%= link_to comment.comment,  [@product, comment] %>
                 <% else %>
                   <%= comment.comment %>

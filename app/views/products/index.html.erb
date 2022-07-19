@@ -1,7 +1,7 @@
 <h3 style="text-align: center;">All Products</h3>
 <%= link_to 'New Product', new_product_path, class: "float-right mr-3" %>
 
-<div style="display: flex; mt-5">
+<div style="display: flex; flex-wrap:wrap;">
   <% @products.each do |product| %>
     <div class="card product-card" style="border-radius: 20px">
       <%= image_tag product.images.first, style:"height: 15rem; border-radius: 20px;" if product.images.attached? %>

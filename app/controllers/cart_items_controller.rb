@@ -4,19 +4,18 @@
 class CartItemsController < ApplicationController
   def index
     if current_user
-      config_buyer if current_user&.seller? || current_user&.visitor?
-      @cart_items = CartItem.select('*').where(cartt_id: current_user.cartt_id)
+      config_buyer if !current_user.buyer?
+      @cart_items = CartItem.cart_items(current_user.cartt_id)
     else
       cart_id = session['cart_id']
-      @cart_items = CartItem.select('*').where(cartt_id: cart_id)
+      @cart_items = CartItem.cart_items(cart_id)
     end
   end
 
   def create
     @cart_item = CartItem.new(cart_item_params)
-
-    if current_user&.seller?
-      flash[:notice] = "Currently, you're in seller mode. Change to buyer to buy products."
+    if !current_user&.buyer?
+      flash[:notice] = "You need to switch the mode."
     elsif @cart_item.save
       flash[:notice] = 'Product added to cart successfully..'
     else
@@ -66,7 +65,7 @@ class CartItemsController < ApplicationController
 
   def config_buyer
     current_user.update(role: :buyer)
-    flash[:notice] = "Congratulations. You're now buyer. You can buy products."
+    flash[:notice] = 'Switched to buyer mode.'
     redirect_to :root
   end
 end

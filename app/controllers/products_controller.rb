@@ -6,9 +6,9 @@ class ProductsController < ApplicationController
   before_action :authorize_product, only: %i[create]
 
   def index
-    if current_user&.visitor? || current_user&.buyer?
+    if !current_user&.seller?
       current_user.update(role: :seller)
-      flash[:notice] = "Congratulations. You're now seller. You can sell your products."
+      flash[:notice] = "Switched to seller"
       redirect_to :root
     end
     @products = current_user.products
@@ -29,7 +29,7 @@ class ProductsController < ApplicationController
   def create
     respond_to do |format|
       if @product.save
-        current_user.products << @product 
+        current_user.products << @product
         format.html { redirect_to product_url(@product), notice: 'Product was successfully created.' }
         format.json { render :show, status: :created, location: @product }
       else
