@@ -11,10 +11,12 @@
 
     <div class="col-4">
       <% if current_user %>
-        <% if owns_product(@product.id) %>
+        <% if !current_user.products.exists?(@product.id) %>
           <div>
             <h2>Add Comment</h2>
+
             <%= render 'comments/new_form' %>
+
           </div>
         <% end %>
       <% end %>
@@ -25,7 +27,7 @@
           <div class="card text-center m-2">
             <h5>
               <% if current_user %>
-                <% if owns_comment(comment.id) %>
+                <% if current_user.comments.exists? (comment.id) %>
                   <%= link_to comment.comment,  [@product, comment] %>
                 <% else %>
                   <%= comment.comment %>

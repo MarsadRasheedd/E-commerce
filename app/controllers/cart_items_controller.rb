@@ -4,7 +4,7 @@
 class CartItemsController < ApplicationController
   def index
     if current_user
-      config_buyer if !current_user.buyer?
+      config_buyer if current_user&.seller? || current_user&.visitor?
       @cart_items = CartItem.cart_items(current_user.cartt_id)
     else
       cart_id = session['cart_id']
@@ -14,8 +14,8 @@ class CartItemsController < ApplicationController
 
   def create
     @cart_item = CartItem.new(cart_item_params)
-    if !current_user&.buyer?
-      flash[:notice] = "You need to switch the mode."
+    if current_user&.seller? || current_user&.visitor?
+      flash[:notice] = 'You need to switch the mode.'
     elsif @cart_item.save
       flash[:notice] = 'Product added to cart successfully..'
     else

@@ -6,9 +6,9 @@ class ProductsController < ApplicationController
   before_action :authorize_product, only: %i[create]
 
   def index
-    if !current_user&.seller?
+    if current_user&.visitor? || current_user&.buyer?
       current_user.update(role: :seller)
-      flash[:notice] = "Switched to seller"
+      flash[:notice] = 'Switched to seller'
       redirect_to :root
     end
     @products = current_user.products
