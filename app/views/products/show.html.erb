@@ -14,9 +14,7 @@
         <% if !current_user.products.exists?(@product.id) %>
           <div>
             <h2>Add Comment</h2>
-
             <%= render 'comments/new_form' %>
-
           </div>
         <% end %>
       <% end %>

@@ -11,7 +11,7 @@
   <% end %>
   <p>
     <%= form.label :comment %><br>
-    <%= form.text_area :comment %>
+    <%= form.text_area :comment, required: true %>
     <%= form.hidden_field :user_id, style:"width: 0px;",  value: current_user.id %>
   </p>
   <p>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_14_155951) do
+ActiveRecord::Schema.define(version: 2022_07_21_143816) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,6 +91,8 @@ ActiveRecord::Schema.define(version: 2022_07_14_155951) do
     t.float "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "order_id"
+    t.index ["order_id"], name: "index_orders_lists_on_order_id"
     t.index ["product_id"], name: "index_orders_lists_on_product_id"
     t.index ["user_id"], name: "index_orders_lists_on_user_id"
   end
@@ -124,7 +126,7 @@ ActiveRecord::Schema.define(version: 2022_07_14_155951) do
     t.integer "phone"
     t.string "address"
     t.bigint "cartt_id"
-    t.integer "role", default: 0
+    t.integer "role", default: 2
     t.index ["cartt_id"], name: "index_users_on_cartt_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -136,6 +138,7 @@ ActiveRecord::Schema.define(version: 2022_07_14_155951) do
   add_foreign_key "comments", "products"
   add_foreign_key "comments", "users"
   add_foreign_key "orders", "users"
+  add_foreign_key "orders_lists", "orders"
   add_foreign_key "orders_lists", "products"
   add_foreign_key "orders_lists", "users"
   add_foreign_key "users", "cartts"

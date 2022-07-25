@@ -5,4 +5,5 @@ class Order < ApplicationRecord
   validates :amount, numericality: true
 
   belongs_to :user
+  has_many :orders_lists, dependent: :destroy
 end

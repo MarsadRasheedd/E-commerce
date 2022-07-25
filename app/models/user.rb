@@ -8,11 +8,10 @@ class User < ApplicationRecord
   validates :address, presence: true, length: { minimum: 8, message: 'is too short.' }
   validates :phone, length: { minimum: 8, message: 'length must be greater then 8.' }
   validates :phone, numericality: true
-  validates :encrypted_password, presence: { message: 'cannot be blank.' }
 
   belongs_to :cartt
   has_and_belongs_to_many :products, dependent: :destroy
   has_many :comments, dependent: :destroy
 
-  enum role: { visitor: 0, seller: 1, buyer: 2 }
+  enum role: { seller: 1, buyer: 2 }
 end

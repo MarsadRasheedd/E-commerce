@@ -9,27 +9,27 @@
 
           <div class="field form-group">
             <%= f.label :first_name %><br />
-            <%= f.text_field :first_name, autofocus: true, autocomplete: "first_name", class:"form-control" %>
+            <%= f.text_field :first_name, autofocus: true, required: true, autocomplete: "first_name", class:"form-control" %>
           </div>
 
           <div class="field form-group">
             <%= f.label :last_name %><br />
-            <%= f.text_field :last_name, autofocus: true, autocomplete: "last_name", class:"form-control"%>
+            <%= f.text_field :last_name, autofocus: true,  required: true, autocomplete: "last_name", class:"form-control"%>
           </div>
 
           <div class="field form-group">
             <%= f.label :email %><br />
-            <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control" %>
+            <%= f.email_field :email, required: true, autofocus: true, autocomplete: "email", class:"form-control" %>
           </div>
 
           <div class="field form-group">
             <%= f.label :phone %><br />
-            <%= f.phone_field :phone, autofocus: true, autocomplete: "phone", class:"form-control" %>
+            <%= f.phone_field :phone, required: true, autofocus: true, autocomplete: "phone", class:"form-control" %>
           </div>
 
           <div class="field form-group">
             <%= f.label :address %><br />
-            <%= f.text_field :address, autofocus: true, autocomplete: "address", class:"form-control" %>
+            <%= f.text_field :address,  required: true, autofocus: true, autocomplete: "address", class:"form-control" %>
           </div>
 
           <div class="field form-group">
@@ -37,13 +37,23 @@
             <% if @minimum_password_length %>
             <em>(<%= @minimum_password_length %> characters minimum)</em>
             <% end %><br />
-            <%= f.password_field :password, autocomplete: "new-password", class:"form-control" %>
+            <%= f.password_field :password, required: true, autocomplete: "new-password", class:"form-control" %>
           </div>
 
           <div class="field form-group">
             <%= f.label :password_confirmation %><br />
-            <%= f.password_field :password_confirmation, autocomplete: "new-password" , class:"form-control" %>
+            <%= f.password_field :password_confirmation, required: true, autocomplete: "new-password" , class:"form-control" %>
           </div>
+
+          <div class="field form-group">
+            <%= f.label "Join as" %> <br>
+            <%= f.radio_button :role, :buyer, checked: true %>
+            <%= f.label :role, 'Buyer', value: :buyer %>
+
+            <%= f.radio_button :role, :seller %>
+            <%= f.label :role, 'Seller', value: :seller %>
+          </div>
+
 
           <% if session["cart_id"] %>
             <%= f.hidden_field :cartt_id, style:"width: 0px;",  value: session["cart_id"] %>

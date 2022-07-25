@@ -2,7 +2,7 @@
 
 # this controller handles charges methods.
 class ChargesController < ApplicationController
-  helper_method :amount
+  include ChargesHelper
 
   def new
     if user_signed_in?
@@ -21,9 +21,5 @@ class ChargesController < ApplicationController
   rescue Stripe::CardError => e
     flash[:error] = e.message
     redirect_to new_charge_path
-  end
-
-  def amount
-    Cartt.find(current_user.cartt_id).totalPrice.to_i
   end
 end

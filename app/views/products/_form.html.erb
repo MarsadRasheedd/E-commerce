@@ -16,22 +16,22 @@
 
         <div class="field form-group">
           <%= form.label :title %>
-          <%= form.text_field :title, class: "form-control" %>
+          <%= form.text_field :title, required: true, class: "form-control" %>
         </div>
 
         <div class="field form-group">
           <%= form.label :description %>
-          <%= form.text_area :description, class: "form-control" %>
+          <%= form.text_area :description, required: true, class: "form-control" %>
         </div>
 
         <div class="field form-group">
           <%= form.label :price %>
-          <%= form.text_field :price, class: "form-control" %>
+          <%= form.text_field :price, required: true, class: "form-control" %>
         </div>
 
         <div class="field form-group">
           <%= form.label :Select_Product_Image %>
-          <%= form.file_field :images, multiple: true %>
+          <%= form.file_field :images, required: true, multiple: true %>
         </div>
 
         <div class="actions">

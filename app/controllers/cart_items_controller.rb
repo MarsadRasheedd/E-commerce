@@ -4,7 +4,7 @@
 class CartItemsController < ApplicationController
   def index
     if current_user
-      config_buyer if current_user&.seller? || current_user&.visitor?
+      config_buyer if current_user&.seller?
       @cart_items = CartItem.cart_items(current_user.cartt_id)
     else
       cart_id = session['cart_id']
@@ -14,7 +14,7 @@ class CartItemsController < ApplicationController
 
   def create
     @cart_item = CartItem.new(cart_item_params)
-    if current_user&.seller? || current_user&.visitor?
+    if current_user&.seller?
       flash[:notice] = 'You need to switch the mode.'
     elsif @cart_item.save
       flash[:notice] = 'Product added to cart successfully..'
@@ -25,9 +25,12 @@ class CartItemsController < ApplicationController
     redirect_to :root
   end
 
-  def increment_quantity
+  def update
     @cart_item = CartItem.find(params[:id])
-    if @cart_item.update(quantity: (@cart_item.quantity + 1))
+    quantity = params[:update][:quantity].to_i
+    return unless quantity >= 0
+
+    if @cart_item.update(quantity: quantity)
       flash[:notice] = 'Product Updated Successfully.'
     else
       flash[:alert] = 'Something went wrong while updating.'
@@ -35,19 +38,7 @@ class CartItemsController < ApplicationController
     redirect_to :cart_items
   end
 
-  def decrement_quantity
-    @cart_item = CartItem.find(params[:id])
-    return unless @cart_item.quantity != 1
-
-    if @cart_item.update(quantity: (@cart_item.quantity - 1))
-      flash[:notice] = 'Product Updated Successfully.'
-    else
-      flash[:alert] = 'Something went wrong while updating.'
-    end
-    redirect_to :cart_items
-  end
-
-  def delete_item
+  def destroy
     @cart_item = CartItem.find(params[:id])
     if @cart_item.destroy
       flash[:notice] = 'Product removed from cart successfully'
@@ -64,7 +55,7 @@ class CartItemsController < ApplicationController
   end
 
   def config_buyer
-    current_user.update(role: :buyer)
+    current_user.buyer!
     flash[:notice] = 'Switched to buyer mode.'
     redirect_to :root
   end

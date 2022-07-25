@@ -7,11 +7,9 @@ class CouponsController < ApplicationController
 
     if @code.nil? || @code[0] != params[:promo_code]
       flash[:alert] = 'Your code is not valid.'
-      @validity = 'false'
       redirect_to :cart_items, flash: { validity: false }
     else
       flash[:notice] = 'Your code is valid. Discount will be applied.'
-      @validity = 'true'
       redirect_to :cart_items, flash: { validity: [true, parse_discount_value(@code[0])] }
     end
   end

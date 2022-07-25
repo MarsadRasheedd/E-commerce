@@ -5,16 +5,15 @@
       <% discount = flash[:validity][1] %>
   <% end %>
 
-  <table class="table table-bordered mt-3">
-    <thead>
+  <table style="text-align: center;" class="table table-bordered mt-3">
+    <thead >
       <tr>
         <th>Title</th>
         <th>Description</th>
         <th>Price</th>
         <th>Serial no</th>
-        <th>Decrement</th>
         <th>Quantity</th>
-        <th>Increment</th>
+        <th>Update</th>
         <th>Total Price</th>
         <th>Remove</th>
       </tr>
@@ -27,14 +26,17 @@
             <td><%= product.price %></td>
             <td><%= product.serial_no %></td>
 
-            <td><%= button_to "-", {controller: :cart_items, action: 'decrement_quantity', id: item.id }, style: "width: 50px", class: "btn btn-primary", method: :patch %></td>
-            <td><strong><%= quantity %></strong></td>
-            <td><%= button_to "+", {controller: :cart_items, action: 'increment_quantity', id: item.id }, style: "width: 50px", class: "btn btn-primary", method: :patch %></td>
+            <%= form_for item, as: :update, url: cart_item_path(item), method: :patch,
+                        html: { autocomplete: "off", class: 'cart-quoter' } do |f| %>
+              <td><%= f.text_field :quantity, value: quantity.to_i, class: "form-control", style: "text-align: center;", type: "number" %><td>
+              <%= f.submit 'update', class: "btn btn-success" %>
+            <% end %>
 
             <% total = product.price * item.quantity %>
             <% sub_total = sub_total + total %>
             <td><%= total %></td>
-            <td><%= button_to "Remove from cart", {:controller => :cart_items, :action => 'delete_item', :id => item.id }, class: "btn btn-danger", :method => :delete %></td>
+
+            <td><%= button_to 'Remove from cart', item, method: :delete, class: "btn btn-danger", :method => :delete %></td>
           </tbody>
         <% end %>
     </thead>
@@ -48,7 +50,7 @@
           <h4>Apply Promo Code if you have any?</h4>
 
           <form action="/apply_coupon" method: :get>
-            <input type="text" class="form-control" name="promo_code">
+            <input type="text" class="form-control" name="promo_code" required>
             <button type="submit" class="btn btn-primary mt-3">Apply</button>
           </form>
 

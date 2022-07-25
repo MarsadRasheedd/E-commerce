@@ -9,28 +9,38 @@
 
             <div class="field form-group">
             <%= f.label :first_name %><br />
-            <%= f.text_field :first_name, autofocus: true, autocomplete: "first_name", class: "form-control" %>
+            <%= f.text_field :first_name, required: true, autofocus: true, autocomplete: "first_name", class: "form-control" %>
           </div>
 
           <div class="field form-group">
             <%= f.label :last_name %><br />
-            <%= f.text_field :last_name, autofocus: true, autocomplete: "last_name", class: "form-control" %>
+            <%= f.text_field :last_name, required: true, autofocus: true, autocomplete: "last_name", class: "form-control" %>
           </div>
 
           <div class="field form-group">
             <%= f.label :phone %><br />
-            <%= f.text_field :phone, autofocus: true, autocomplete: "phone", class: "form-control" %>
+            <%= f.text_field :phone, required: true, autofocus: true, autocomplete: "phone", class: "form-control" %>
           </div>
 
           <div class="field form-group">
             <%= f.label :address %><br />
-            <%= f.text_area :address, autofocus: true, autocomplete: "address", class: "form-control" %>
+            <%= f.text_area :address, required: true, autofocus: true, autocomplete: "address", class: "form-control" %>
           </div>
 
           <div class="field form-group">
             <%= f.label :email %><br />
-            <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+            <%= f.email_field :email, required: true, autofocus: true, autocomplete: "email", class: "form-control" %>
           </div>
+
+          <div class="field form-group">
+            <%= f.label "Switch to" %> <br>
+            <%= f.radio_button :role, :buyer %>
+            <%= f.label :role, 'Buyer', value: :buyer %>
+
+            <%= f.radio_button :role, :seller %>
+            <%= f.label :role, 'Seller', value: :seller %>
+          </div>
+
 
           <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
             <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
@@ -51,7 +61,7 @@
 
           <div class="field form-group">
             <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-            <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control" %>
+            <%= f.password_field :current_password, required: true, autocomplete: "current-password", class: "form-control" %>
           </div>
 
           <div class="actions d-flex justify-content-center mb-3">

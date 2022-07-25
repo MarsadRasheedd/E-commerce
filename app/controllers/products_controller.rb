@@ -6,8 +6,8 @@ class ProductsController < ApplicationController
   before_action :authorize_product, only: %i[create]
 
   def index
-    if current_user&.visitor? || current_user&.buyer?
-      current_user.update(role: :seller)
+    if current_user&.buyer?
+      current_user.seller!
       flash[:notice] = 'Switched to seller'
       redirect_to :root
     end
@@ -20,6 +20,15 @@ class ProductsController < ApplicationController
   def new
     @product = Product.new
     authorize @product
+  end
+
+  def public_products
+    @cart_item = CartItem.new
+    @products = params[:search] ? Product.search(params[:search]) : Product.all
+  end
+
+  def error_page
+    render file: 'public/404.html'
   end
 
   def edit
