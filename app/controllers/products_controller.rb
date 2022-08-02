@@ -28,7 +28,7 @@ class ProductsController < ApplicationController
   end
 
   def error_page
-    render file: 'public/404.html'
+    render file: 'public/404.html',  :status => 404
   end
 
   def edit

@@ -2,7 +2,7 @@
 
 class Coupon < ApplicationRecord
   validates :promo_code, presence: true,
-                         format: { with: /\A[A-Z0-9]+.[0-9]+.{1}[0-9]*{4,10}\z/, message: 'format not correct.' }
+                         format: { with: /[A-Z0-9]+.[0-9]+.{1}[0-9].{4,10}/, message: 'format not correct.' }
   validates :valid_till, presence: true, format: { with: /\d{4}-\d{2}-\d{2}/, message: 'date format not correct.' }
 
   scope :is_valid_coupon, lambda { |promo_code|

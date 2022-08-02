@@ -4,8 +4,32 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
+one:
 # column: value
+  first_name: "rana"
+  last_name: "marsad"
+  email: "ranamarsad@gmail.com"
+  address: "Gujranwala"
+  phone: 123456789
+  encrypted_password: "$2a$10$8uCZ9wCTsFoqa0aIfpssne4qtchcpqhepdU5WylZwh4GBAkgFWEYe"
+  cartt:  <%= Cartt.find(ActiveRecord::FixtureSet.identify('one')) %>
+
+two:
+# column: value
+  first_name: "rana"
+  last_name: "marsad"
+  email: "ranamarsad222@gmail.com"
+  address: "Gujranwala"
+  phone: 123456789
+  encrypted_password: "$2a$10$8uCZ9wCTsFoqa0aIfpssne4qtchcpqhepdU5WylZwh4GBAkgFWEYe"
+  cartt:  <%= Cartt.find(ActiveRecord::FixtureSet.identify('two')) %>
+
 #
-two: {}
-# column: value
+# two:
+# # column: value
+#   first_name: "rana"
+#   last_name: "haris"
+#   email: "ranaharis@gmail.com"
+#   phone: 123456789
+#   encrypted_password: "$2a$10$8uCZ9wCTsFoqa0aIfpssne4qtchcpqhepdU5WylZwh4GBAkgFWEYe"
+#   cartt_id: 2
