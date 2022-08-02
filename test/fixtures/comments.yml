@@ -1,7 +1,5 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
-  comment: MyString
-
-two:
-  comment: MyString
+  comment: "comment"
+  product:  <%= Product.find(ActiveRecord::FixtureSet.identify('one')) %>
+  user:  <%= User.find(ActiveRecord::FixtureSet.identify('one')) %>

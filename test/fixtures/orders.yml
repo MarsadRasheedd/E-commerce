@@ -1,11 +1,6 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  order_date: 2022-07-10
-  amount: 1.5
-  user: one
-
-two:
-  order_date: 2022-07-10
-  amount: 1.5
-  user: two
+  order_date: "2023-12-12"
+  amount: 0
+  user:  <%= User.find(ActiveRecord::FixtureSet.identify('one')) %>

@@ -42,8 +42,6 @@ class CartItemsController < ApplicationController
     @cart_item = CartItem.find(params[:id])
     if @cart_item.destroy
       flash[:notice] = 'Product removed from cart successfully'
-    else
-      flash[:alert] = 'Something went wrong while deleting.'
     end
     redirect_to :cart_items
   end

@@ -1,11 +1,6 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  quantity: 1.5
-  product: one
-  cart: one
-
-two:
-  quantity: 1.5
-  product: two
-  cart: two
+  quantity: 1
+  product:  <%= Product.find(ActiveRecord::FixtureSet.identify('one')) %>
+  cartt:  <%= Cartt.find(ActiveRecord::FixtureSet.identify('one')) %>
